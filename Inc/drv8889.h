@@ -1,6 +1,7 @@
 #ifndef drv8889_H
 //powered by studyhooligen@HUST_STI_K10
 #define drv8889_H
+#include "stm32h7xx_hal.h"
 
 //!!!
 //when use other hardware structure ,you must refit these pins!!!
@@ -18,13 +19,13 @@
 //when use other hardware structure ,you must refit above pins!!!!
 
 typedef struct writeDataStructure{
-	__UINT8_TYPE__ address;
-	__UINT8_TYPE__ data;
+	uint8_t  address;
+	uint8_t data;
 }SPIsendData;
 
 typedef struct getDataStructure{
-	__UINT8_TYPE__ status;
-	__UINT8_TYPE__ report;
+	uint8_t status;
+	uint8_t report;
 }SPIgetData;
 
 #define FAULT_STATUS	0X00
@@ -125,14 +126,18 @@ void LockMotor_Device8889()  {
 }
 
 void reset_Device8889()  {  //if use OS ,had better redefine delay of this function to improve  efficiency
-	
+	HAL_GPIO_WritePin(nSLEEP_GPIO_Port,nSLEEP_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(DRV_OFF_GPIO_Port,DRV_OFF_Pin,GPIO_PIN_SET);
+	HAL_Delay(100);
+	HAL_GPIO_WritePin(nSLEEP_GPIO_Port,nSLEEP_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(DRV_OFF_GPIO_Port,DRV_OFF_Pin,GPIO_PIN_RESET);
 }
 
-void changeCurrentDiv_Device8889(__UINT32_TYPE__ divLevel)  {
+void changeCurrentDiv_Device8889(uint32_t divLevel)  {
 
 }
 
-void changeRatio_Device8889(__UINT32_TYPE__ ratio)  {
+void changeRatio_Device8889(uint32_t ratio)  {
 }
 
 #endif
